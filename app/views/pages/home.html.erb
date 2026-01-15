@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Ruby on Rails RealWorld App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        text-align: center;
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .buttons {
+        margin-top: 20px;
+      }
+      .buttons a {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .login-btn {
+        background-color: #007bff;
+        color: white;
+      }
+      .login-btn:hover {
+        background-color: #0056b3;
+      }
+      .register-btn {
+        background-color: #28a745;
+        color: white;
+      }
+      .register-btn:hover {
+        background-color: #218838;
+      }
+      .articles-btn {
+        background-color: #6c757d;
+        color: white;
+      }
+      .articles-btn:hover {
+        background-color: #5a6268;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to the RealWorld App</h1>
+      <p>This is the home page.</p>
+      <div class="buttons">
+        <% if @current_user %>
+          <%= link_to 'Go to Articles', articles_path, class: 'articles-btn' %>
+        <% else %>
+          <%= link_to 'Login', '/login', class: 'login-btn' %>
+          <%= link_to 'Register', '/register', class: 'register-btn' %>
+        <% end %>
+      </div>
+    </div>
+  </body>
+</html>

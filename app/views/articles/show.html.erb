@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><%= @article.title %> - Ruby on Rails RealWorld App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+      }
+      nav li {
+        margin: 0 15px;
+      }
+      nav a {
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      nav a:hover {
+        background-color: rgba(255,255,255,0.2);
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .meta {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 20px;
+      }
+      .description {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+      .body {
+        line-height: 1.6;
+        color: #333;
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .back-link:hover {
+        background-color: #5a6268;
+      }
+      .actions {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .edit-link, .delete-link {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .edit-link {
+        background-color: #28a745;
+        color: white;
+      }
+      .edit-link:hover {
+        background-color: #218838;
+      }
+      .delete-link {
+        background-color: #dc3545;
+        color: white;
+      }
+      .delete-link:hover {
+        background-color: #c82333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><%= link_to 'Home', '/' %></li>
+          <li><%= link_to 'Articles', '/articles' %></li>
+          <li><%= link_to 'Tags', '/tags' %></li>
+          <li><%= link_to 'Contact Me', '#' %></li>
+          <li><%= link_to 'About', '#' %></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1><%= @article.title %></h1>
+      <p class="meta">By <%= @article.user.username %> on <%= @article.created_at.strftime('%B %d, %Y') %></p>
+      <p class="description"><%= @article.description %></p>
+      <div class="body"><%= @article.body %></div>
+      <% if @current_user && @current_user.id == @article.user_id %>
+        <div class="actions">
+          <%= link_to 'Edit', edit_article_path(@article.slug), class: 'edit-link' %>
+          <%= link_to 'Delete', article_path(@article.slug), method: :delete, data: { confirm: 'Are you sure?' }, class: 'delete-link' %>
+        </div>
+      <% end %>
+      <%= link_to 'Back to Articles', articles_path, class: 'back-link' %>
+    </div>
+  </body>
+</html>

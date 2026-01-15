@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>New Article - Ruby on Rails RealWorld App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+      }
+      nav li {
+        margin: 0 15px;
+      }
+      nav a {
+        color: white;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      nav a:hover {
+        background-color: rgba(255,255,255,0.2);
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      label {
+        margin-bottom: 5px;
+        color: #666;
+      }
+      input[type="text"], textarea {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      textarea {
+        height: 100px;
+      }
+      button {
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><%= link_to 'Home', '/' %></li>
+          <li><%= link_to 'Articles', '/articles' %></li>
+          <li><%= link_to 'Tags', '/tags' %></li>
+          <li><%= link_to 'Logout', logout_path, method: :delete %></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1>New Article</h1>
+      <%= form_with model: @article, url: articles_path, method: :post do |f| %>
+        <label for="article_title">Title</label>
+        <%= f.text_field :title, required: true %>
+
+        <label for="article_description">Description</label>
+        <%= f.text_field :description, required: true %>
+
+        <label for="article_body">Body</label>
+        <%= f.text_area :body, required: true %>
+
+        <label for="article_tagList">Tags (comma separated)</label>
+        <%= f.text_field :tagList, value: @article.tagList&.join(', ') %>
+
+        <%= f.submit 'Create Article' %>
+      <% end %>
+      <%= link_to 'Back to Articles', articles_path, class: 'back-link' %>
+    </div>
+  </body>
+</html>

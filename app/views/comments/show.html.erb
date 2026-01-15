@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Comment - Ruby on Rails RealWorld App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        width: 400px;
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .meta {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 20px;
+      }
+      .actions a {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+      .edit-link {
+        background-color: #28a745;
+        color: white;
+      }
+      .edit-link:hover {
+        background-color: #218838;
+      }
+      .delete-link {
+        background-color: #dc3545;
+        color: white;
+      }
+      .delete-link:hover {
+        background-color: #c82333;
+      }
+      .back-link {
+        background-color: #6c757d;
+        color: white;
+      }
+      .back-link:hover {
+        background-color: #5a6268;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Comment</h1>
+      <p><%= @comment.body %></p>
+      <p class="meta">By <%= @comment.user.username %> on <%= @comment.created_at.strftime('%B %d, %Y') %></p>
+      <div class="actions">
+        <%= link_to 'Edit', edit_comment_path(@comment), class: 'edit-link' %>
+        <%= link_to 'Delete', comment_path(@comment), method: :delete, data: { confirm: 'Are you sure?' }, class: 'delete-link' %>
+        <%= link_to 'Back to Comments', comments_path, class: 'back-link' %>
+      </div>
+    </div>
+  </body>
+</html>
