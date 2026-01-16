@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_06_035813) do
+ActiveRecord::Schema[7.0].define(version: 2026_01_16_010614) do
   create_table "articles", force: :cascade do |t|
     t.string "title"
     t.string "slug"
@@ -23,11 +23,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_035813) do
     t.index ["user_id"], name: "index_articles_on_user_id"
   end
 
-  create_table "articles_tags", id: false, force: :cascade do |t|
-    t.integer "article_id", null: false
-    t.integer "tag_id", null: false
-    t.index "\":article_id,\", \":tag_id\"", name: "index_articles_tags_on_:article_id,_and_:tag_id"
-  end
 
   create_table "articles_users", id: false, force: :cascade do |t|
     t.integer "article_id", null: false
@@ -52,11 +47,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_06_035813) do
     t.index ["following_id"], name: "index_followers_on_following_id"
   end
 
-  create_table "tags", force: :cascade do |t|
+  create_table "products", force: :cascade do |t|
     t.string "name"
+    t.text "description"
+    t.decimal "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|

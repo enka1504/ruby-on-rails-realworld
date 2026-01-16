@@ -2,6 +2,11 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <title>Articles - Ruby on Rails RealWorld App</title>
     <style>
       body {
@@ -87,6 +92,7 @@
       .new-link:hover {
         background-color: #218838;
       }
+   
     </style>
   </head>
 
@@ -96,7 +102,6 @@
         <ul>
           <li><%= link_to 'Home', '/' %></li>
           <li><%= link_to 'Articles', '/articles' %></li>
-          <li><%= link_to 'Tags', '/tags' %></li>
           <li><%= link_to 'Contact Me', '#' %></li>
           <li><%= link_to 'About', '#' %></li>
         </ul>
@@ -106,16 +111,178 @@
     <div class="container">
       <h1>Articles</h1>
       <% if @current_user %>
-        <p style="text-align: center;"><%= link_to 'New Article', new_article_path, class: 'new-link' %></p>
+        <p style="text-align: center;"><%= link_to 'New Article', '/api/articles/new', class: 'new-link' %></p>
       <% end %>
-
       <% @articles.each do |article| %>
-        <div class="article">
-          <h2><%= link_to article.title, article_path(article.slug) %></h2>
-          <p><%= article.description %></p>
-          <p class="meta">By <%= article.user.username %> on <%= article.created_at.strftime('%B %d, %Y') %></p>
-        </div>
+          <% if article.user_id == @current_user.id %>
+            <div >
+              <div class="article">
+                <h2><%= article.title %></h2>
+                <p><%= article.description %></p>
+                <p><%= article.body %></p>
+                <p class="meta">By <%= article.user.username %> on <%= article.created_at.strftime('%B %d, %Y') %></p>
+              <div>
+                <div class="actions">
+                  <button class="btn btn-primary" type="button" onclick="window.location.href='/api/articles/<%= article.slug %>'">Edit</button>
+                  <button class="btn btn-danger" type="button" onclick="confirmDelete('<%= article.slug %>')">Delete</button>
+                </div>
+            </div>
+          <% end %>
       <% end %>
     </div>
+      <script>
+        <% @articles.each do |article| %>
+          console.log('Article:', {
+            id: <%= article.id %>,
+            title: '<%= article.title %>', 
+            createdAt: '<%= article.created_at %>'
+          });
+        <% end %>
+      </script>
   </body>
+  <script>
+    async function confirmDelete(slug) {
+      if (!confirm('Are you sure you want to delete this article?')) {
+        return;
+      }
+
+      try {
+        // Try multiple ways to get CSRF token
+        const csrfToken = getCSRFToken();
+        console.log('Using CSRF Token:', csrfToken ? 'Found' : 'Not found', csrfToken);
+        
+        if (!csrfToken) {
+          console.warn('CSRF token not found, trying without it...');
+          // Some APIs might not require CSRF for DELETE
+        }
+
+        const headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        };
+        
+        // Only add CSRF token if we have it
+        if (csrfToken) {
+          headers['X-CSRF-Token'] = csrfToken;
+          headers['X-Requested-With'] = 'XMLHttpRequest';
+        }
+
+        const response = await fetch(`/api/articles/${encodeURIComponent(slug)}`, {
+          method: 'DELETE',
+          headers: headers,
+          credentials: 'same-origin'  // Important for cookies/sessions
+        });
+
+        if (response.ok) {
+          // Show success message
+          const message = await response.json().then(data => data.message).catch(() => 'Article deleted successfully');
+          showToast(message, 'success');
+          
+          // Remove from DOM or redirect
+          const articleElement = document.querySelector(`[data-article-slug="${slug}"]`);
+          if (articleElement) {
+            articleElement.style.opacity = '0';
+            setTimeout(() => {
+              articleElement.remove();
+              // If no articles left, redirect
+              if (!document.querySelector('[data-article-slug]')) {
+                window.location.href = '/articles';
+              }
+            }, 300);
+          } else {
+            setTimeout(() => window.location.href = '/articles', 1000);
+          }
+        } else {
+          const errorText = await response.text();
+          let errorMessage = `HTTP ${response.status}`;
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.error || errorData.message || errorMessage;
+          } catch (e) {
+            errorMessage = errorText || errorMessage;
+          }
+          throw new Error(errorMessage);
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        showToast(`Delete failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Helper function to find CSRF token
+    function getCSRFToken() {
+      // Method 1: Standard meta tag
+      const metaToken = document.querySelector('meta[name="csrf-token"]');
+      if (metaToken) return metaToken.content;
+      
+      // Method 2: Input field in forms
+      const inputToken = document.querySelector('input[name="authenticity_token"]');
+      if (inputToken) return inputToken.value;
+      
+      // Method 3: Any element with data attribute
+      const dataToken = document.querySelector('[data-csrf-token]');
+      if (dataToken) return dataToken.dataset.csrfToken;
+      
+      // Method 4: Check Rails meta tag variations
+      const csrfMeta = document.querySelector('meta[name="csrf-param"]');
+      if (csrfMeta) {
+        const paramName = csrfMeta.content;
+        const tokenElement = document.querySelector(`[name="${paramName}"]`);
+        if (tokenElement) return tokenElement.value;
+      }
+      
+      // Method 5: Check for Rails UJS global
+      if (typeof Rails !== 'undefined' && Rails.csrfToken) {
+        return Rails.csrfToken();
+      }
+      
+      console.warn('CSRF token not found. Available meta tags:');
+      document.querySelectorAll('meta').forEach(tag => {
+        console.log(tag.outerHTML);
+      });
+      
+      return null;
+    }
+
+    // Simple toast/alert function
+    function showToast(message, type = 'info') {
+      // Create a toast element
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#007bff'};
+        color: white;
+        border-radius: 4px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+      `;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Add CSS for animation
+    if (!document.querySelector('#toast-styles')) {
+      const style = document.createElement('style');
+      style.id = 'toast-styles';
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  </script>
 </html>

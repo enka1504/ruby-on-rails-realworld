@@ -7,7 +7,7 @@ class RegistrationsController < ActionController::Base
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
-      redirect_to articles_path, notice: 'Registered successfully!'
+      redirect_to auth_login_path, notice: 'Registered successfully!'
     else
       render :new
     end

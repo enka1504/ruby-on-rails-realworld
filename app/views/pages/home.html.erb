@@ -68,8 +68,8 @@
         <% if @current_user %>
           <%= link_to 'Go to Articles', articles_path, class: 'articles-btn' %>
         <% else %>
-          <%= link_to 'Login', '/login', class: 'login-btn' %>
-          <%= link_to 'Register', '/register', class: 'register-btn' %>
+          <%= link_to 'Login', auth_login_path, class: 'login-btn' %>
+          <%= link_to 'Register', auth_register_path, class: 'register-btn' %>
         <% end %>
       </div>
     </div>

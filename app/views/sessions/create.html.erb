@@ -77,7 +77,7 @@
       <% if flash[:alert] %>
         <p class="alert"><%= flash[:alert] %></p>
       <% end %>
-      <%= form_with url: login_path, method: :post do |f| %>
+      <%= form_with url: '/api/auth/login', method: :post do |f| %>
         <label for="email">Email</label>
         <%= f.email_field :email, required: true %>
 
@@ -87,7 +87,7 @@
         <%= f.submit 'Login' %>
       <% end %>
       <div class="links">
-        <%= link_to 'Register', register_path %> | <%= link_to 'Home', root_path %>
+        <%= link_to 'Register', '/api/auth/register' %> | <%= link_to 'Home', root_path %>
       </div>
     </div>
   </body>

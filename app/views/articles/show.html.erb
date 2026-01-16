@@ -110,7 +110,6 @@
         <ul>
           <li><%= link_to 'Home', '/' %></li>
           <li><%= link_to 'Articles', '/articles' %></li>
-          <li><%= link_to 'Tags', '/tags' %></li>
           <li><%= link_to 'Contact Me', '#' %></li>
           <li><%= link_to 'About', '#' %></li>
         </ul>
@@ -124,7 +123,7 @@
       <div class="body"><%= @article.body %></div>
       <% if @current_user && @current_user.id == @article.user_id %>
         <div class="actions">
-          <%= link_to 'Edit', edit_article_path(@article.slug), class: 'edit-link' %>
+          <%= link_to 'Edit', '/api/articles/' + @article.slug + '/edit', class: 'edit-link' %>
           <%= link_to 'Delete', article_path(@article.slug), method: :delete, data: { confirm: 'Are you sure?' }, class: 'delete-link' %>
         </div>
       <% end %>

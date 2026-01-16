@@ -1,32 +1,30 @@
+
 Rails.application.routes.draw do
   root 'pages#home'
-  get 'login', to: 'sessions#new'
-  post 'login', to: 'sessions#create'
-  delete 'logout', to: 'sessions#destroy'
-  get 'register', to: 'registrations#new'
-  post 'register', to: 'registrations#create'
   resources :articles
-  resources :comments
-  resources :tags
   scope :api do
-    post 'auth/login', to: 'authentication#login'
-    resources :users, only: [:show, :create]
-    put 'user', to: 'users#custom_update'
-    get 'user', to: 'users#current'
-
-    post 'articles/:slug/favorite', to: 'articles#favorite'
-    delete 'articles/:slug/favorite', to: 'articles#unfavorite'
-
-    resources :articles, param: :slug do
-      resources :comments, only: [:index, :create, :destroy]
-      get :feed, on: :collection
+    resources :users
+    put 'auth/login', to: 'users#custom_update'
+    get 'auth/login', to: 'sessions#new'
+    post 'auth/login', to: 'sessions#create'
+    delete 'auth/logout', to: 'sessions#destroy'
+    get 'auth/register', to: 'registrations#new'
+    post 'auth/register', to: 'registrations#create'
+    
+    scope :articles do
+      get '', to: 'articles#index'
+      post '', to: 'articles#create'
+      post ':slug/favorite', to: 'articles#favorite' 
+      delete ':slug/favorite', to: 'articles#unfavorite'
+      get 'new', to: 'articles#new'
+      get ':slug', to: 'articles#edit'
+      patch ':slug', to: 'articles#update'
+      delete ':slug', to: 'articles#destroy'
     end
-
     scope :profiles do
       get ':username', to: 'profiles#show'
       post ':username/follow', to: 'profiles#follow'
       delete ':username/follow', to: 'profiles#unfollow'
     end
-    resources :tags, only: :index
   end
 end
