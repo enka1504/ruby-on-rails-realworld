@@ -21,6 +21,11 @@ Rails.application.routes.draw do
       patch ':slug', to: 'articles#update'
       delete ':slug', to: 'articles#destroy'
     end
+
+     scope :comment do
+      get '', to: 'comments#index'
+      post '', to: 'comments#create'
+    end
     scope :profiles do
       get ':username', to: 'profiles#show'
       post ':username/follow', to: 'profiles#follow'
