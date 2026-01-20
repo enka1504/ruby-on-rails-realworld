@@ -21,7 +21,7 @@ Make sure you have Ruby and Rails installed on your computer.
 Clone the repo and enter the project folder
 
 ```
-git clone https://github.com/alexeymezenin/ruby-on-rails-realworld-example-app
+git clone https://github.com/enka1504/ruby-on-rails-realworld-example-app
 cd ruby-on-rails-realworld-example-app
 ```
 
