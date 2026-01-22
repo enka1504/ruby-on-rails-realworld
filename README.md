@@ -1,10 +1,10 @@
-Contribution: 2026-1-15 20:01
+![Ruby](https://img.shields.io/badge/Ruby-Ruby%20on%20Rails-red)
+![Rails](https://img.shields.io/badge/Rails-API-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-Contribution: 2026-1-16 22:02
-
-Contribution: 2026-1-17 8:03
-
-Contribution: 2026-1-19 15:04
+<!-- If you add GitHub Actions later:
+![CI](https://github.com/<USER>/<REPO>/actions/workflows/ci.yml/badge.svg)
+-->
 
 ### Ruby On Rails implementation of RealWorld app
 

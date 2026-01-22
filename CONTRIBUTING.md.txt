@@ -1,0 +1,66 @@
+Thanks for your interest in contributing! 🎉
+
+## Ways to contribute
+- Fix bugs
+- Improve documentation
+- Add tests
+- Improve performance or code readability
+- Add developer tooling (Docker, CI, etc.)
+
+## Development setup
+
+### Requirements
+- Ruby + Bundler
+- Rails
+- A database (SQLite or PostgreSQL depending on config)
+
+### Install dependencies
+```bash
+bundle install
+Database setup
+bash
+Copy code
+rails db:migrate
+(Optional)
+
+bash
+Copy code
+rails db:seed
+Run the server
+bash
+Copy code
+rails server
+The API should be available at:
+
+http://127.0.0.1:3000/api
+
+Branch & PR workflow
+Fork the repo
+
+Create a feature branch:
+
+bash
+Copy code
+git checkout -b feature/my-change
+Commit with a clear message:
+
+bash
+Copy code
+git commit -m "Fix: handle empty tags response"
+Push and open a Pull Request
+
+Code style
+Prefer small PRs
+
+Add/adjust tests when changing behavior
+
+Keep endpoints compatible with the RealWorld API spec
+
+Reporting issues
+If you find a bug, please open an issue with:
+
+Steps to reproduce
+
+Expected vs actual behavior
+
+Rails/Ruby versions
